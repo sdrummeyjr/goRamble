@@ -15,8 +15,21 @@ let add = fn(x, y) {
 };
 
 let result = add(five, ten);
+!-/*5;
+5 < 10 > 5;
+
+if (5 < 10) {
+	return true;
+} else {
+	return false
+}
+
+10 == 10;
+10 != 9;
+
 `
-	//todo before test, make sure that this matches pages 21-22
+	// todo edit the input so that can test out the new keywords
+
 	tests := []struct {
 		expectedType    token.TokenType
 		expectedLiteral string
@@ -56,6 +69,18 @@ let result = add(five, ten);
 		{token.COMMA, ","},
 		{token.IDENT, "ten"},
 		{token.RPAREN, ")"},
+		{token.SEMICOLON, ";"},
+		{token.BANG, "!"},
+		{token.MINUS, "-"},
+		{token.SLASH, "/"},
+		{token.ASTERISK, "*"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.LT, "<"},
+		{token.INT, "10"},
+		{token.GT, ">"},
+		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
