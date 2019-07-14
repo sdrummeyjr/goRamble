@@ -1,0 +1,4 @@
+to test without vet:
+go test -vet=off <./package>
+
+https://www.alexedwards.net/blog/an-overview-of-go-tooling#testing-all-dependencies
