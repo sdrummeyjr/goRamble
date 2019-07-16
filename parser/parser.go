@@ -55,6 +55,9 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.INT, p.parseIntegerLiteral)
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
+	p.registerPrefix(token.TRUE, p.parseBoolean)
+	p.registerPrefix(token.FALSE, p.parseBoolean)
+	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
@@ -106,22 +109,17 @@ func (p *Parser) parseStatement() ast.Statement {
 
 func (p *Parser) parseLetStatement() *ast.LetStatement {
 	stmt := &ast.LetStatement{Token: p.curToken}
-
 	if !p.expectPeek(token.IDENT) {
 		return nil
 	}
-
 	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
-
 	if !p.expectPeek(token.ASSIGN) {
 		return nil
 	}
-
 	// todo issue here???
 	//p.nextToken()
 	//
 	//stmt.Value = p.parseExpression(LOWEST)
-
 	//	todo skipping expressions until we encounter a semicolon
 	for !p.curTokenIs(token.SEMICOLON) {
 		p.nextToken()
@@ -158,20 +156,16 @@ func (p *Parser) peekError(t token.TokenType) {
 
 func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
-
 	p.nextToken()
-
-	//	todo: we're skipping the expressions until we encounter a semicolon
+	// we're skipping the expressions until we encounter a semicolon
 	for !p.curTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
-
 	return stmt
 }
 
 func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
 	p.prefixParseFns[tokenType] = fn
-
 }
 
 func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
@@ -195,6 +189,11 @@ func (p *Parser) noPrefixParseFnError(t token.TokenType) {
 	p.errors = append(p.errors, msg)
 }
 
+//func (p *Parser) noInfixParseFnError(t token.TokenType) {
+//	msg := fmt.Sprintf("no infix parse function for %s found", t)
+//	p.errors = append(p.errors, msg)
+//}
+
 // Sets the precedence of tokens when parsing the expression
 func (p *Parser) parseExpression(precedence int) ast.Expression {
 	prefix := p.prefixParseFns[p.curToken.Type]
@@ -207,6 +206,7 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 	for !p.peekTokenIs(token.SEMICOLON) && precedence < p.peekPrecedence() {
 		infix := p.infixParseFns[p.peekToken.Type]
 		if infix == nil {
+			//p.noInfixParseFnError(p.peekToken.Type)
 			return leftExp
 		}
 		p.nextToken()
@@ -232,18 +232,6 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 	return lit
 }
 
-func (p *Parser) parsePrefixExpression() ast.Expression {
-	expression := &ast.PrefixExpression{
-		Token:    p.curToken,
-		Operator: p.curToken.Literal,
-	}
-	p.nextToken()
-	expression.Right = p.parseExpression(PREFIX)
-	return expression
-}
-
-// todo bottom of page 84
-
 func (p *Parser) peekPrecedence() int {
 	if p, ok := precedences[p.peekToken.Type]; ok {
 		return p
@@ -258,16 +246,42 @@ func (p *Parser) curPrecedence() int {
 	return LOWEST
 }
 
+func (p *Parser) parsePrefixExpression() ast.Expression {
+	expression := &ast.PrefixExpression{
+		Token:    p.curToken,
+		Operator: p.curToken.Literal,
+	}
+	p.nextToken()
+	expression.Right = p.parseExpression(PREFIX)
+	return expression
+}
+
 func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 	expression := &ast.InfixExpression{
 		Token:    p.curToken,
 		Operator: p.curToken.Literal,
 		Left:     left,
 	}
-
 	precedence := p.curPrecedence()
 	p.nextToken()
 	expression.Right = p.parseExpression(precedence)
 
 	return expression
 }
+
+func (p *Parser) parseBoolean() ast.Expression {
+	return &ast.Boolean{Token: p.curToken, Value: p.curTokenIs(token.TRUE)}
+}
+
+func (p *Parser) parseGroupedExpression() ast.Expression {
+	p.nextToken()
+
+	exp := p.parseExpression(LOWEST)
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+	return exp
+}
+
+// todo page 107 - If Expressions
