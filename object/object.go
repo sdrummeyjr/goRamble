@@ -100,3 +100,15 @@ func (s *String) Inspect() string  { return s.Value }
 // ------------------------------------------------------------------------------------------------------------------ \\
 
 // todo page 204
+type BuiltinFunction func(args ...Object) Object
+
+const (
+	BUILTIN_OBJ = "BUILTIN"
+)
+
+type Builtin struct {
+	Fn BuiltinFunction
+}
+
+func (b *Builtin) Type() ObjectType { return BUILTIN_OBJ }
+func (b *Builtin) Inspect() string  { return "builtin function" }
