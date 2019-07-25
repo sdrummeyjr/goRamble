@@ -30,6 +30,8 @@ const (
 	RPAREN    = ")"
 	LBRACE    = "{"
 	RBRACE    = "}"
+	LBRACKET  = "["
+	RBRACKET  = "]"
 
 	//	keywords
 	FUNCTION = "FUNCTION"
@@ -38,8 +40,9 @@ const (
 	FALSE    = "FALSE"
 	IF       = "IF"
 	ELSE     = "ELSE"
-	// todo consider adding ELIF
+	// todo consider adding ELIF, or match instead
 	RETURN = "RETURN"
+	IMPORT = "IMPORT" // todo - add functionality
 )
 
 type Token struct {
@@ -55,6 +58,7 @@ var keywords = map[string]TokenType{
 	"if":     IF,
 	"else":   ELSE,
 	"return": RETURN,
+	"import": IMPORT,
 }
 
 func LookupIdent(ident string) TokenType {
