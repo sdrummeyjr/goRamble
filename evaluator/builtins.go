@@ -1,8 +1,8 @@
 package evaluator
 
 import (
+	"fmt"
 	"goRamble/object"
-	//"fmt"
 )
 
 // todo - add exit to close the interpreter
@@ -106,6 +106,15 @@ var builtins = map[string]*object.Builtin{
 			newElements[length] = args[1]
 
 			return &object.Array{Elements: newElements}
+		},
+	},
+	"print": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			for _, arg := range args {
+				fmt.Println(arg.Inspect())
+			}
+
+			return NULL
 		},
 	},
 }
