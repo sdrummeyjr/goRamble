@@ -188,6 +188,29 @@ var builtins = map[string]*object.Builtin{
 			return NULL
 		},
 	},
+	//"add": &object.Builtin{
+	//	Fn: func(args ...object.Object) object.Object {
+	//
+	//		switch args[0].(type) {
+	//
+	//
+	//		}
+	//		for _, i := range args {
+	//
+	//		}
+	//
+	//
+	//		code := 0
+	//		if len(args) > 0 {
+	//			switch arg := args[0].(type) {
+	//			case *object.Integer:
+	//				code = int(arg.Value)
+	//			}
+	//		}
+	//		os.Exit(code)
+	//		return NULL
+	//	},
+	//},
 }
 
 // todo page 230 - Test Arrays

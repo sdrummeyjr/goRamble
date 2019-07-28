@@ -41,16 +41,18 @@ type (
 type Parser struct {
 	l              *lexer.Lexer
 	errors         []string
+	path           string
 	curToken       token.Token
 	peekToken      token.Token
 	prefixParseFns map[token.TokenType]prefixParseFn
 	infixParseFns  map[token.TokenType]infixParseFn
 }
 
-func New(l *lexer.Lexer) *Parser {
+func New(l *lexer.Lexer, wd string) *Parser {
 	p := &Parser{
 		l:      l,
 		errors: []string{},
+		path:   wd,
 	}
 
 	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
