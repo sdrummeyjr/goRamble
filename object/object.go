@@ -24,6 +24,8 @@ const (
 	BYTE_OBJ         = "BYTE"
 )
 
+// todo add FLOAT
+
 type Object interface {
 	Type() ObjectType
 	Inspect() string

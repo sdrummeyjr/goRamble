@@ -188,32 +188,28 @@ var builtins = map[string]*object.Builtin{
 			return NULL
 		},
 	},
-	//"add": &object.Builtin{
-	//	Fn: func(args ...object.Object) object.Object {
-	//
-	//		switch args[0].(type) {
-	//
-	//
-	//		}
-	//		for _, i := range args {
-	//
-	//		}
-	//
-	//
-	//		code := 0
-	//		if len(args) > 0 {
-	//			switch arg := args[0].(type) {
-	//			case *object.Integer:
-	//				code = int(arg.Value)
-	//			}
-	//		}
-	//		os.Exit(code)
-	//		return NULL
-	//	},
-	//},
+	"abs": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1",
+					len(args))
+			}
+			switch arg := args[0].(type) {
+			case *object.Integer:
+				v := arg.Value
+				if v < 0 {
+					v = v * -1
+				}
+				return &object.Integer{Value: v}
+			default:
+				return newError("argument to `abs` not supported, got=%s",
+					args[0].Type())
+			}
+		},
+	},
 }
 
-// todo page 230 - Test Arrays
+// ------------------------------------------------------------------------------------------------------------------ \\
 
 //},
 //"byte": &object.Builtin{
@@ -266,3 +262,37 @@ var builtins = map[string]*object.Builtin{
 //		return newError("argument to `eval` not supported, got=%s",
 //			args[0].Type())
 //		},
+//"add": &object.Builtin{
+//Fn: func(args ...object.Object) object.Object {
+//if len(args) != 1 {
+//return newError("wrong number of arguments. got=%d, want=1",
+//len(args))
+//}
+//switch arg := args[0].(type) {
+//case *object.Integer:
+//v := arg.Value
+//if v < 0 {
+//v = v * -1
+//}
+//return &object.Integer{Value: v}
+//default:
+//return newError("argument to `add` not supported, got=%s",
+//args[0].Type())
+//},
+//},
+//"sqrt": &object.Builtin{
+//	Fn: func(args ...object.Object) object.Object {
+//		if len(args) != 1 {
+//			return newError("wrong number of arguments. got=%d, want=1",
+//				len(args))
+//		}
+//		switch arg := args[0].(type) {
+//		case *object.Integer:
+//			v := arg.Value
+//			return &object.Float{Value: math.Sqrt(float64(v))}
+//		default:
+//			return newError("argument to `math.sqrt` not supported, got=%s",
+//				args[0].Type())
+//		}
+//	},
+//},
