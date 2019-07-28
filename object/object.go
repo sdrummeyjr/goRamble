@@ -20,6 +20,7 @@ const (
 	STRING_OBJ       = "STRING"
 	ARRAY_OBJ        = "ARRAY"
 	HASH_OBJ         = "HASH"
+	BYTE_OBJ         = "BYTE"
 )
 
 type Object interface {
@@ -37,6 +38,14 @@ func (i *Integer) Type() ObjectType { return INTEGER_OBJ }
 func (i *Integer) HashKey() HashKey {
 	return HashKey{Type: i.Type(), Value: uint64(i.Value)}
 }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+type Byte struct {
+	Value byte
+}
+
+func (by *Byte) Inspect() string  { return fmt.Sprintf("%x", by.Value) }
+func (by *Byte) Type() ObjectType { return BYTE_OBJ }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 type Boolean struct {

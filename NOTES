@@ -7,3 +7,8 @@ https://www.alexedwards.net/blog/an-overview-of-go-tooling#testing-all-dependenc
 handle import:
 - define way of finding the file being imported
 - parse the import and save contents to a pointer
+
+Macros
+https://interpreterbook.com/lost/#macro-systems
+
+https://github.com/skx/monkey#my-changes

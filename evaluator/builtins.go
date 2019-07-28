@@ -1,8 +1,12 @@
 package evaluator
 
 import (
+	"bufio"
 	"fmt"
 	"goRamble/object"
+	"os"
+	"strings"
+	//"bytes"
 )
 
 // todo - add exit to close the interpreter
@@ -117,6 +121,81 @@ var builtins = map[string]*object.Builtin{
 			return NULL
 		},
 	},
+	"str": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1",
+					len(args))
+			}
+
+			out := args[0].Inspect()
+			return &object.String{Value: out}
+		},
+	},
+	"type": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1",
+					len(args))
+			}
+
+			out := strings.ToLower(string(args[0].Type()))
+			return &object.String{Value: out}
+		},
+	},
+	"open": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			path := ""
+			if len(args) < 1 {
+				return newError("wrong number of arguments. got=%d, want=1+",
+					len(args))
+			}
+
+			// Get the filename
+			switch args[0].(type) {
+			case *object.String:
+				path = args[0].(*object.String).Value
+			default:
+				return newError("argument to `file` not supported, got=%s",
+					args[0].Type())
+
+			}
+
+			var lines []string
+			file, err := os.Open(path)
+			if err != nil {
+				newError("the following error occured: %s", err)
+			}
+			defer file.Close()
+
+			scanner := bufio.NewScanner(file)
+			for scanner.Scan() {
+				lines = append(lines, scanner.Text())
+			}
+			newLines := strings.Join(lines, " ")
+			return &object.String{Value: newLines}
+		},
+	},
+	//"eval": &object.Builtin{
+	//	Fn: func(args ...object.Object) object.Object {
+	//
+	//	}
+	//	},
+	//},
+
+	//"byte": &object.Builtin{
+	//	Fn: func(args ...object.Object) object.Object {
+	//		if len(args) != 1 {
+	//			return newError("wrong number of arguments. got=%d, want=1",
+	//				len(args))
+	//		}
+	//		//for _, arg := range args {
+	//		//	b := byte(arg.Type())
+	//		//}
+	//		out := bytes.Buffer{args[0].Inspect()}
+	//		return &object.Byte{Value: out}
+	//	},
+	//},
 }
 
 // todo page 230 - Test Arrays

@@ -155,3 +155,5 @@ func (l *Lexer) readString() string {
 	}
 	return l.input[position:l.position]
 }
+
+// todo add ability to lex and parse bytes/byte arrays...buffer

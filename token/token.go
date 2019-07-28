@@ -10,6 +10,7 @@ const (
 	IDENT  = "IDENT"
 	INT    = "INT"
 	STRING = "STRING" // "foobar"
+	BYTE   = "BYTE"
 
 	// operators
 	ASSIGN   = "="
