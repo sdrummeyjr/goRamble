@@ -17,6 +17,7 @@ const (
 	RETURN_VALUE_OBJ = "RETURN_VALUE"
 	ERROR_OBJ        = "ERROR"
 	FUNCTION_OBJ     = "FUNCTION"
+	BUILTIN_OBJ      = "BUILTIN"
 	STRING_OBJ       = "STRING"
 	ARRAY_OBJ        = "ARRAY"
 	HASH_OBJ         = "HASH"
@@ -131,12 +132,7 @@ func (s *String) HashKey() HashKey {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-// todo page 204
 type BuiltinFunction func(args ...Object) Object
-
-const (
-	BUILTIN_OBJ = "BUILTIN"
-)
 
 type Builtin struct {
 	Fn BuiltinFunction
