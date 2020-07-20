@@ -1,3 +1,12 @@
+
+let n = -69;
+print("'n' is: ", n)
+print("The absolute value of 'n' is: ", abs(n))
+
 let h = "hello, world!";
 
 print(h)
+
+let f = open("bye.txt");
+
+print(f)

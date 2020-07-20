@@ -207,7 +207,43 @@ var builtins = map[string]*object.Builtin{
 			}
 		},
 	},
+
+	// TODO - add tail and head (from functional languages)
+	// todo add ability to run python script
+	// todo add in take, read, and others from Haskell
 }
+
+//"so": &object.Builtin{
+//	Fn: func(args ...object.Object) object.Object {
+//		if len(args) != 1 {
+//			return newError("wrong number of arguments. got=%d, want=1",
+//				len(args))
+//		}
+//
+//		var total [object.Object]
+//
+//		for _, v := range args{
+//			//so := int64(unsafe.Sizeof(v))
+//			append(total, v)
+//		}
+//
+//		return &object.Integer{Value:total}
+//		//switch arg := args[0].(type) {
+//		//case *object.Integer:
+//		//	v := arg.Value
+//		//	so := int64(unsafe.Sizeof(v))
+//		//	return &object.Integer{Value: so}
+//		//case *object.String:
+//		//	v := arg.Value
+//		//	so := int64(unsafe.Sizeof(v))
+//		//	return &object.Integer{Value: so}
+//		//default:
+//		//	return newError("argument to `sizeof` not supported, got=%s",
+//		//		args[0].Type())
+//		//
+//		//}
+//		},
+//},
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
